@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Conversion GST Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center mb-6">Currency Conversion GST Calculator</h1>
+        <div class="mb-4">
+            <label for="amount" class="block text-sm font-medium text-gray-700">Foreign Currency Amount</label>
+            <input type="number" id="amount" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter amount" step="0.01">
+        </div>
+        <div class="mb-4">
+            <label for="exchangeRate" class="block text-sm font-medium text-gray-700">Exchange Rate (to INR)</label>
+            <input type="number" id="exchangeRate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter exchange rate" step="0.01">
+        </div>
+        <button onclick="calculateGST()" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-200">Calculate GST</button>
+        <div id="result" class="mt-6 text-center"></div>
+    </div>
+
+    <script>
+        function calculateGST() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const exchangeRate = parseFloat(document.getElementById('exchangeRate').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(amount) || isNaN(exchangeRate) || amount <= 0 || exchangeRate <= 0) {
+                resultDiv.innerHTML = '<p class="text-red-500">Please enter valid positive numbers for amount and exchange rate.</p>';
+                return;
+            }
+
+            const convertedAmount = amount * exchangeRate;
+            let gst = 0;
+
+            if (convertedAmount <= 100000) {
+                gst = Math.max(45, convertedAmount * 0.0018);
+            } else if (convertedAmount <= 1000000) {
+                gst = (1000 + (convertedAmount - 100000) * 0.005)*0.18;
+            } else {
+                gst = (5500 + (convertedAmount - 1000000) * 0.001)*0.18;
+            }
+
+            resultDiv.innerHTML = `
+                <p class="text-gray-700">Converted Amount: <span class="font-semibold">₹${convertedAmount.toFixed(2)}</span></p>
+                <p class="text-gray-700">GST Payable: <span class="font-semibold">₹${gst.toFixed(2)}</span></p>
+            `;
+        }
+    </script>
+</body>
+</html>
