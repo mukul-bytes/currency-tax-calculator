@@ -33,6 +33,7 @@
             }
 
             const convertedAmount = amount * exchangeRate;
+			
             let gst = 0;
 
             if (convertedAmount <= 100000) {
@@ -42,10 +43,13 @@
             } else {
                 gst = (5500 + (convertedAmount - 1000000) * 0.001)*0.18;
             }
+			
+			const totalAmount = convertedAmount + gst;
 
             resultDiv.innerHTML = `
                 <p class="text-gray-700">Converted Amount: <span class="font-semibold">₹${convertedAmount.toFixed(2)}</span></p>
                 <p class="text-gray-700">GST Payable: <span class="font-semibold">₹${gst.toFixed(2)}</span></p>
+				<p class="text-gray-700">Total Amount: <span class="font-semibold">₹${totalAmount.toFixed(2)}</span></p>
             `;
         }
     </script>
